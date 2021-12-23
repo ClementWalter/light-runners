@@ -4,7 +4,12 @@ coverage
 coverage.json
 typechain
 
-#Hardhat files
+# Hardhat files
 cache
 artifacts
+
+# PyCharm files
 .idea/
+
+# Runners files
+runners.json
