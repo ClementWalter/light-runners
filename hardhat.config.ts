@@ -28,7 +28,7 @@ const config: HardhatUserConfig = {
       default: 1,
     },
     tokenOwner: {
-      default: 1,
+      default: 2,
     },
   },
   networks: {
