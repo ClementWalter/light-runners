@@ -14,6 +14,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     args: ["Hello, world!"],
     log: true,
   });
+  await deploy("LightRunner", {
+    from: deployer,
+    log: true,
+  });
 };
 export default func;
 func.tags = ["Greeter"];
