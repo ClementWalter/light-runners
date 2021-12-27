@@ -18,6 +18,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     from: deployer,
     log: true,
   });
+  await deploy("RLE", {
+    from: deployer,
+    log: true,
+  });
 };
 export default func;
 func.tags = ["Greeter"];
