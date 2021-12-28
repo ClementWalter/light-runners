@@ -16,7 +16,27 @@ import { accounts, node_url } from "./utils/network";
 dotenv.config();
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.4",
+  solidity: {
+    version: "0.8.4",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 2000,
+        details: {
+          yul: true,
+          // Tuning options for the Yul optimizer.
+          yulDetails: {
+            //   // Improve allocation of stack slots for variables, can free up stack slots early.
+            //   // Activated by default if the Yul optimizer is activated.
+            stackAllocation: true,
+            //   // Select optimization steps to be applied.
+            //   // Optional, the optimizer will use the default sequence if omitted.
+            optimizerSteps: "dhfoDgvulfnTUtnIf",
+          },
+        },
+      },
+    },
+  },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: "USD",

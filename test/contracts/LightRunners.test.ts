@@ -8,9 +8,9 @@ import {
 } from "hardhat";
 
 async function setup() {
-  await deployments.fixture(["LightRunner"]);
+  await deployments.fixture(["LightRunners"]);
   const contracts = {
-    LightRunner: await ethers.getContract("LightRunner"),
+    LightRunners: await ethers.getContract("LightRunners"),
   };
   const { deployer } = await getNamedAccounts();
   const users = await setupUsers(await getUnnamedAccounts(), contracts);
@@ -21,14 +21,14 @@ async function setup() {
   };
 }
 
-describe("LightRunner", function () {
+describe("LightRunners", function () {
   it("Should return empty string after deployment", async function () {
-    const { LightRunner } = await setup();
-    expect(await LightRunner.content()).to.equal("0x");
+    const { LightRunners } = await setup();
+    expect(await LightRunners.content()).to.equal("0x");
   });
   it("Should set a one byte length string", async function () {
-    const { LightRunner } = await setup();
-    await LightRunner.setContent("0x0140");
-    expect(await LightRunner.content()).to.equal("0x40");
+    const { LightRunners } = await setup();
+    await LightRunners.setContent("0x0140");
+    expect(await LightRunners.content()).to.equal("0x40");
   });
 });

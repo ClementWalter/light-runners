@@ -9,8 +9,8 @@ task("light-runners", "RLE encode the runners traits to a JSON file")
   .addOptionalParam("input", "The output file", "runners.json")
   .addOptionalParam("output", "The output file", "light-runners.json")
   .setAction(async ({ input, output }, { deployments, ethers }) => {
-    await deployments.fixture(["LightRunner"]);
-    const LightRunner = await ethers.getContract("LightRunner");
+    await deployments.fixture(["LightRunners"]);
+    const LightRunners = await ethers.getContract("LightRunners");
     const traits: Traits = JSON.parse(
       fs.readFileSync(input, { encoding: "utf-8" })
     );
@@ -31,8 +31,8 @@ task("light-runners", "RLE encode the runners traits to a JSON file")
           break;
         }
         const hexString = "0x" + encodedString;
-        await LightRunner.setContent(hexString);
-        const storedContent = await LightRunner.content();
+        await LightRunners.setContent(hexString);
+        const storedContent = await LightRunners.content();
         assert(storedContent === design[1]);
         lightTraits[trait[0]][design[0]] = hexString;
       }

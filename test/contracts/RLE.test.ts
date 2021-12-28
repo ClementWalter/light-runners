@@ -8,7 +8,7 @@ import {
 } from "hardhat";
 
 async function setup() {
-  await deployments.fixture(["LightRunner"]);
+  await deployments.fixture(["RLE"]);
   const contracts = {
     RLE: await ethers.getContract("RLE"),
   };
