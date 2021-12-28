@@ -9,11 +9,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const { deployer } = await getNamedAccounts();
 
-  await deploy("LightRunner", {
+  await deploy("RLE", {
     from: deployer,
     log: true,
   });
-  await deploy("RLE", {
+  await deploy("LightRunner", {
     from: deployer,
     log: true,
   });
