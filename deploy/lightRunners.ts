@@ -9,11 +9,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const { deployer } = await getNamedAccounts();
 
-  await deploy("Greeter", {
-    from: deployer,
-    args: ["Hello, world!"],
-    log: true,
-  });
   await deploy("LightRunner", {
     from: deployer,
     log: true,
@@ -24,4 +19,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   });
 };
 export default func;
-func.tags = ["Greeter"];
+func.tags = ["LightRunner"];

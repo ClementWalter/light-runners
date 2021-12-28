@@ -1,13 +1,16 @@
 import { task } from "hardhat/config";
 import fs from "fs";
 import { decode, encode } from "../utils/rle";
+import assert from "assert";
 
 type Traits = Record<string, Record<string, string>>;
 
 task("light-runners", "RLE encode the runners traits to a JSON file")
   .addOptionalParam("input", "The output file", "runners.json")
   .addOptionalParam("output", "The output file", "light-runners.json")
-  .setAction(async ({ input, output }) => {
+  .setAction(async ({ input, output }, { deployments, ethers }) => {
+    await deployments.fixture(["LightRunner"]);
+    const LightRunner = await ethers.getContract("LightRunner");
     const traits: Traits = JSON.parse(
       fs.readFileSync(input, { encoding: "utf-8" })
     );
@@ -27,7 +30,11 @@ task("light-runners", "RLE encode the runners traits to a JSON file")
           console.log(decode(encodedString));
           break;
         }
-        lightTraits[trait[0]][design[0]] = "0x" + encode(design[1].slice(2));
+        const hexString = "0x" + encodedString;
+        await LightRunner.setContent(hexString);
+        const storedContent = await LightRunner.content();
+        assert(storedContent === design[1]);
+        lightTraits[trait[0]][design[0]] = hexString;
       }
     }
 
