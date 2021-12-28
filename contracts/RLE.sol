@@ -3,7 +3,7 @@ pragma solidity ^0.8.4;
 
 library RLE {
     function decode(bytes calldata _rleBytes)
-        public
+        internal
         pure
         returns (bytes memory)
     {

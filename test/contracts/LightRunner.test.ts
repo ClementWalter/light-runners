@@ -28,7 +28,7 @@ describe("LightRunner", function () {
   });
   it("Should set a one byte length string", async function () {
     const { LightRunner } = await setup();
-    await LightRunner.setContent("0xff");
-    expect(await LightRunner.content()).to.equal("0xff");
+    await LightRunner.setContent("0x0140");
+    expect(await LightRunner.content()).to.equal("0x40");
   });
 });
