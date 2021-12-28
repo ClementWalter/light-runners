@@ -1,6 +1,6 @@
 // See https://stackoverflow.com/a/61155795/4444546
 import { expect } from "chai";
-import { decode, encode, intToHex } from "../../utils/rle";
+import { decode, encode, encodeGroup, intToHex } from "../../utils/rle";
 
 describe("rle", function () {
   let hexString: string, rleString: string;
@@ -69,6 +69,31 @@ describe("rle", function () {
       expect(parseInt(intToHex(10), 16)).to.equal(10);
       expect(parseInt(intToHex(10), 16)).to.equal(10);
       expect(parseInt(intToHex(16), 16)).to.equal(16);
+    });
+    it("should throw if input is too large", () => {
+      expect(() => intToHex(256)).to.throw(RangeError);
+    });
+    it("should accept negative values and get their prime modulo", () => {
+      expect(intToHex(-1)).to.equal(intToHex(255));
+    });
+  });
+  describe("encodeGroup", () => {
+    it("should encode string with less than 256 occurrence", () => {
+      const chr = "00";
+      const group = chr.repeat(3);
+      expect(encodeGroup(group, chr)).to.equal("03" + chr);
+    });
+    it("should encode string with 256 occurrence", () => {
+      const chr = "00";
+      const group = chr.repeat(256);
+      expect(encodeGroup(group, chr)).to.equal("ff" + chr + "01" + chr);
+    });
+    it("should encode string with 512 occurrence", () => {
+      const chr = "00";
+      const group = chr.repeat(512);
+      expect(encodeGroup(group, chr)).to.equal(
+        "ff" + chr + "ff" + chr + "02" + chr
+      );
     });
   });
 });

@@ -7,15 +7,27 @@ export const decode = (str: string): string => {
 };
 
 export const encode = (str: string): string => {
-  return str.replace(
-    /(\w{2})\1*/g,
-    (group, chr) => intToHex(group.length / 2) + chr
-  );
+  return str.replace(/(\w{2})\1*/g, encodeGroup);
 };
 
 // See https://stackoverflow.com/a/34356351/4444546
 // Convert a byte to a hex string
 export const intToHex = (byte: number): string => {
+  if (byte >= 256) {
+    throw RangeError(
+      `Input byte should be lower than 256 but received ${byte}`
+    );
+  }
   const current = byte < 0 ? byte + 256 : byte;
   return (current >>> 4).toString(16) + (current & 0xf).toString(16);
+};
+
+export const encodeGroup = (group: string, chr: string): string => {
+  let length = group.length / 2;
+  let hexString = "";
+  while (length > 255) {
+    hexString += "ff" + chr;
+    length -= 255;
+  }
+  return hexString + intToHex(length) + chr;
 };
