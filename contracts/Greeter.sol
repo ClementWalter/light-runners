@@ -1,8 +1,6 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.4;
 
-import "hardhat/console.sol";
-
 contract Greeter {
     struct Greeting {
         uint8 id;
@@ -37,5 +35,9 @@ contract Greeter {
 
     function addGreeting(uint256 _id) external {
         greetings.push(Greeting(uint8(_id), "test"));
+    }
+
+    function addGreeting(string memory _greeting) external {
+        greetings.push(Greeting(uint8(0), _greeting));
     }
 }
