@@ -42,30 +42,39 @@ describe("Greeter", function () {
       expect(await Greeter.greetings(0)).to.eql(Object.values(greetings));
     });
   });
-  // describe("addGreeting", function () {
-  //   it("Should add one Greeting", async function () {
-  //     const { Greeter } = await setup();
-  //     await Greeter.addGreeting(0, "Hello, Hardhat!");
-  //     expect(await Greeter.greetings()).to.equal({
-  //       id: 0,
-  //       text: "Hello, Hardhat!",
-  //     });
-  //   });
-  //   it("Should add one Greeting with id", async function () {
-  //     const { Greeter } = await setup();
-  //     await Greeter.addGreeting(0);
-  //     expect(await Greeter.greetings()).to.equal({
-  //       id: 0,
-  //       text: "test",
-  //     });
-  //   });
-  //   it("Should add one Greeting with text", async function () {
-  //     const { Greeter } = await setup();
-  //     await Greeter.addGreeting(0);
-  //     expect(await Greeter.greetings()).to.equal({
-  //       id: 0,
-  //       text: "test",
-  //     });
-  //   });
-  // });
+  describe("addGreeting", function () {
+    it("Should add one Greeting", async function () {
+      const { Greeter } = await setup();
+      await Greeter.functions["addGreeting(uint256,string)"](
+        0,
+        "Hello, Hardhat!"
+      );
+      expect(await Greeter.greetings(0)).to.eql(
+        Object.values({
+          id: 0,
+          text: "Hello, Hardhat!",
+        })
+      );
+    });
+    it("Should add one Greeting with id", async function () {
+      const { Greeter } = await setup();
+      await Greeter.functions["addGreeting(uint256)"](0);
+      expect(await Greeter.greetings(0)).to.eql(
+        Object.values({
+          id: 0,
+          text: "test",
+        })
+      );
+    });
+    it("Should add one Greeting with text", async function () {
+      const { Greeter } = await setup();
+      await Greeter.functions["addGreeting(string)"]("test");
+      expect(await Greeter.greetings(0)).to.eql(
+        Object.values({
+          id: 0,
+          text: "test",
+        })
+      );
+    });
+  });
 });
