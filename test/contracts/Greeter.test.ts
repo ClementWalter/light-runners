@@ -28,4 +28,34 @@ describe("Greeter", function () {
     await Greeter.setGreeting("Hello, Hardhat!");
     expect(await Greeter.greet()).to.equal("Hello, Hardhat!");
   });
+  it("Should return the new greeting once it's changed 2", async function () {
+    const { Greeter } = await setup();
+    expect(await Greeter.greet()).to.equal("Hello, world!");
+    await Greeter.setGreeting("Hello, Hardhat!");
+    expect(await Greeter.greet()).to.equal("Hello, Hardhat!");
+  });
+  it("Should set the greetings to the new value", async function () {
+    const { Greeter } = await setup();
+    await Greeter.setGreetings([[0, "Hello, Hardhat!"]]);
+    expect(await Greeter.greetings()).to.equal({
+      id: 0,
+      text: "Hello, Hardhat!",
+    });
+  });
+  it("Should add one Greeting", async function () {
+    const { Greeter } = await setup();
+    await Greeter.addGreeting(0, "Hello, Hardhat!");
+    expect(await Greeter.greetings()).to.equal({
+      id: 0,
+      text: "Hello, Hardhat!",
+    });
+  });
+  it("Should add one Greeting", async function () {
+    const { Greeter } = await setup();
+    await Greeter.addGreeting(0);
+    expect(await Greeter.greetings()).to.equal({
+      id: 0,
+      text: "test",
+    });
+  });
 });
