@@ -56,13 +56,16 @@ const config: HardhatUserConfig = {
     mainnet: {
       url: node_url("mainnet"),
       accounts: accounts("mainnet"),
+      tags: ["mainnet"],
     },
     rinkeby: {
       url: node_url("rinkeby"),
       accounts: accounts("rinkeby"),
+      tags: ["staging"],
     },
     hardhat: {
       blockGasLimit: 70_000_000,
+      tags: ["local"],
     },
   },
   etherscan: {

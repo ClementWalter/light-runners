@@ -1,44 +1,27 @@
 import { task } from "hardhat/config";
 import fs from "fs";
-import { decode, encode } from "../utils/rle";
-import assert from "assert";
-
-type Traits = Record<string, Record<string, string>>;
+import { encode } from "../utils/rle";
+import { Layer } from "../utils/types";
 
 task("light-runners", "RLE encode the runners traits to a JSON file")
   .addOptionalParam("input", "The output file", "runners.json")
   .addOptionalParam("output", "The output file", "light-runners.json")
   .setAction(async ({ input, output }, { deployments, ethers }) => {
     await deployments.fixture(["LightRunners"]);
-    const LightRunners = await ethers.getContract("LightRunners");
-    const traits: Traits = JSON.parse(
+    const traits: Layer[] = JSON.parse(
       fs.readFileSync(input, { encoding: "utf-8" })
     );
-    const lightTraits: Traits = JSON.parse(JSON.stringify(traits));
-    const bytesCount = [];
-    const lightBytesCount = [];
-    for (const trait of Object.entries(lightTraits)) {
-      for (const design of Object.entries(trait[1])) {
-        const originalString = design[1].slice(2);
-        const encodedString = encode(originalString);
-        bytesCount.push(originalString.length / 2);
-        lightBytesCount.push(encodedString.length / 2);
+    const bytesCount: number[] = [];
+    const lightBytesCount: number[] = [];
+    const lightTraits = traits.map((trait, i) => {
+      const originalBytes = trait.hexString.slice(2);
+      const encodedBytes = encode(originalBytes);
+      bytesCount.push(originalBytes.length / 2);
+      lightBytesCount.push(encodedBytes.length / 2);
+      return { ...trait, hexString: "0x" + encodedBytes };
+    });
 
-        if (decode(encodedString) !== originalString) {
-          console.log(originalString);
-          console.log(encodedString);
-          console.log(decode(encodedString));
-          break;
-        }
-        const hexString = "0x" + encodedString;
-        await LightRunners.setContent(hexString);
-        const storedContent = await LightRunners.content();
-        assert(storedContent === design[1]);
-        lightTraits[trait[0]][design[0]] = hexString;
-      }
-    }
-
-    fs.writeFileSync(output, JSON.stringify(traits, null, 2));
+    fs.writeFileSync(output, JSON.stringify(lightTraits, null, 2));
 
     console.log(`Original bytes count: ${bytesCount.reduce((p, c) => p + c)}`);
     console.log(

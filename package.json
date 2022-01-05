@@ -5,7 +5,11 @@
   "author": "Clement Walter",
   "license": "MIT",
   "devDependencies": {
+    "@dethcrypto/eth-sdk": "^0.2.4",
+    "@dethcrypto/eth-sdk-client": "^0.1.6",
     "@ethersproject/abi": "^5.0.0",
+    "@ethersproject/abstract-provider": "^5",
+    "@ethersproject/bignumber": "^5",
     "@ethersproject/bytes": "^5.0.0",
     "@ethersproject/hardware-wallets": "^5.0.14",
     "@ethersproject/providers": "^5.0.0",

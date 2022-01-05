@@ -1,9 +1,16 @@
-export type Traits = Record<string, Record<string, string>>;
+export type LayerInput = {
+  name: string;
+  hexString: string;
+  layerIndex: number;
+  itemIndex: number;
+};
 
 export type Layer = {
-  [key: string]: string;
+  traitName: string;
+  itemName: string;
+  hexString: string;
+  layerIndex: number;
+  itemIndex: number;
 };
 
-export type Layers = {
-  [key: string]: Layer;
-};
+export type Layers = Layer[];

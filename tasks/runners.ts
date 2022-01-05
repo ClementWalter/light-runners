@@ -1,30 +1,16 @@
+import { getMainnetSdk } from "@dethcrypto/eth-sdk-client";
+
 import { task } from "hardhat/config";
 import fs from "fs";
 import { decode } from "../utils/base64";
+import { Layers } from "../utils/types";
 
 task("runners", "Export the runners traits to a JSON file")
   .addOptionalParam("output", "The output file", "runners.json")
   .setAction(async ({ output }, { ethers, getNamedAccounts }) => {
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
-    const runnersRendererAddress = "0xfDac77881ff861fF76a83cc43a1be3C317c6A1cC";
-    const runnersAbi = [
-      "function getLayer(uint8 layerIndex, uint8 itemIndex) view returns (tuple(string,bytes))",
-    ];
-    const runnersContract = await new ethers.Contract(
-      runnersRendererAddress,
-      runnersAbi,
-      signer
-    );
-
-    type Layer = {
-      [key: string]: string;
-    };
-    type Layers = {
-      [key: string]: Layer;
-    };
-
-    const layers: Layers = {};
+    const sdk = getMainnetSdk(signer);
 
     const traits = [
       "Background",
@@ -42,20 +28,32 @@ task("runners", "Export the runners traits to a JSON file")
       "Mouth Accessory",
     ];
 
+    const layers: Layers = [];
     for (let i = 0; i < traits.length; i++) {
       const traitName = traits[i];
       console.log(`${traitName}`);
-      layers[traitName] = {} as Layer;
-      for (let j = 0; j < 2; j++) {
-        const [name, data] = await runnersContract.getLayer(i, j);
-        const layerName = decode(name);
-        console.log(`  ${layerName}`);
-        if (layerName.replace(/' '/g, "") === "") {
-          break;
+      let j = 0;
+      let itemName;
+      let isItem;
+      do {
+        const [name, data] = await sdk.chainRunnersBaseRenderer.getLayer(i, j);
+        itemName = decode(name);
+        isItem = itemName.replace(/' '/g, "") !== "";
+        if (isItem) {
+          console.log(`  ${itemName}`);
+          layers.push({
+            traitName,
+            itemName,
+            hexString: data,
+            layerIndex: i,
+            itemIndex: j,
+          });
+          j++;
         }
-        layers[traitName][layerName] = data as string;
-      }
+      } while (isItem);
+      console.log(" * Number of items:", j);
     }
+    console.log(" * Total number of layers:", layers.length);
 
     fs.writeFileSync(output, JSON.stringify(layers, null, 2));
   });
