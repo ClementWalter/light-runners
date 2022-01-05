@@ -2,10 +2,10 @@ import { getMainnetSdk } from "@dethcrypto/eth-sdk-client";
 
 import { task } from "hardhat/config";
 import fs from "fs";
-import { decode } from "../utils/base64";
-import { Layers } from "../utils/types";
+import { decode } from "../../utils/base64";
+import { Layers } from "../../utils/types";
 
-task("runners", "Export the runners traits to a JSON file")
+task("get-layers", "Export the runners traits to a JSON file")
   .addOptionalParam("output", "The output file", "runners.json")
   .setAction(async ({ output }, { ethers, getNamedAccounts }) => {
     const { deployer } = await getNamedAccounts();
