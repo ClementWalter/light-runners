@@ -3,9 +3,9 @@ import fs from "fs";
 import { encode } from "../utils/rle";
 import { Layer } from "../utils/types";
 
-task("light-runners", "RLE encode the runners traits to a JSON file")
-  .addOptionalParam("input", "The output file", "runners.json")
-  .addOptionalParam("output", "The output file", "light-runners.json")
+task("rle-layers", "RLE encode the runners traits to a JSON file")
+  .addOptionalParam("input", "The output file", "runners-base.json")
+  .addOptionalParam("output", "The output file", "runners-rle.json")
   .setAction(async ({ input, output }, { deployments }) => {
     await deployments.fixture(["LightRunners"]);
     const traits: Layer[] = JSON.parse(

@@ -2,7 +2,7 @@
 pragma solidity 0.8.4;
 
 import "./ChainRunnersBaseRenderer.sol";
-import "./RLE.sol";
+import "../lib/RLE.sol";
 
 /*
                ::::                                                                                                                                                  :::#%=

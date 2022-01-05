@@ -12,6 +12,5 @@ artifacts
 .idea/
 
 # Runners files
-runners.json
 .DS_Store
-light-runners.json
+runner1-*.svg

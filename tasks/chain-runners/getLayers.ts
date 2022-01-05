@@ -6,7 +6,7 @@ import { decode } from "../../utils/base64";
 import { Layers } from "../../utils/types";
 
 task("get-layers", "Export the runners traits to a JSON file")
-  .addOptionalParam("output", "The output file", "runners.json")
+  .addOptionalParam("output", "The output file", "runners-base.json")
   .setAction(async ({ output }, { ethers, getNamedAccounts }) => {
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);

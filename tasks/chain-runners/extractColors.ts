@@ -7,7 +7,7 @@ task("extract-colors", "Export global palette used for the runners")
   .addOptionalParam(
     "input",
     "The output file of the get-layers task",
-    "runners.json"
+    "runners-base.json"
   )
   .addOptionalParam(
     "output",
