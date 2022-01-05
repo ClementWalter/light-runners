@@ -35,7 +35,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "ChainRunnersBaseRenderer",
     { from: deployer, log: true },
     "setLayers",
-    layers.slice(0, 3)
+    layers
   );
 };
 export default func;

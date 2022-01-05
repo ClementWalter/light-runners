@@ -61,6 +61,9 @@ const config: HardhatUserConfig = {
       url: node_url("rinkeby"),
       accounts: accounts("rinkeby"),
     },
+    hardhat: {
+      blockGasLimit: 70_000_000,
+    },
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
