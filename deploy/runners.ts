@@ -4,9 +4,10 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import fs from "fs";
 import { Layers, LayerInput } from "../utils/types";
+import { decode } from "../utils/base64";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  const { deployments, getNamedAccounts } = hre;
+  const { deployments, getNamedAccounts, ethers } = hre;
   const { deploy, execute, read } = deployments;
 
   const { deployer } = await getNamedAccounts();
@@ -32,8 +33,14 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "setLayers",
     layers
   );
-  const layer00 = await read("ChainRunnersBaseRenderer", "getLayer", 0, 0);
-  console.log(layer00.hexString);
+  const runner1SVG = await read(
+    "ChainRunnersBaseRenderer",
+    "tokenSVG",
+    ethers.BigNumber.from(
+      "103081089982373387917516143957755319387957419765940801994810980124138188719328"
+    )
+  );
+  fs.writeFileSync("runner1.svg", decode(runner1SVG));
 };
 export default func;
 func.tags = ["ChainRunners"];

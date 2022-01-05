@@ -1234,6 +1234,7 @@ contract ChainRunnersBaseRenderer is Ownable, ReentrancyGuard {
     function getTokenData(uint256 _dna)
         public
         view
+        virtual
         returns (
             Layer[NUM_LAYERS] memory tokenLayers,
             Color[NUM_COLORS][NUM_LAYERS] memory tokenPalettes,
