@@ -6,7 +6,7 @@ import { Layer } from "../utils/types";
 task("light-runners", "RLE encode the runners traits to a JSON file")
   .addOptionalParam("input", "The output file", "runners.json")
   .addOptionalParam("output", "The output file", "light-runners.json")
-  .setAction(async ({ input, output }, { deployments, ethers }) => {
+  .setAction(async ({ input, output }, { deployments }) => {
     await deployments.fixture(["LightRunners"]);
     const traits: Layer[] = JSON.parse(
       fs.readFileSync(input, { encoding: "utf-8" })
