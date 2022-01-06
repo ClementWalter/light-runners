@@ -23,6 +23,7 @@ contract ChainRunnersSStoreRenderer is ChainRunnersBaseRenderer {
     function getLayer(uint8 layerIndex, uint8 itemIndex)
         public
         view
+        virtual
         override
         returns (Layer memory)
     {

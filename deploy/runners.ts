@@ -40,6 +40,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       contract: "ChainRunnersSStoreRenderer",
       traits: "runners-base.json",
     },
+    {
+      name: "SStore-RLE",
+      contract: "ChainRunnersSStoreRLERenderer",
+      traits: "runners-rle.json",
+    },
   ];
   const gas: Record<string, DeployCost> = {};
   for (const renderer of renderers) {
