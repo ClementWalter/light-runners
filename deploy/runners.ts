@@ -11,17 +11,39 @@ type DeployCost = {
   deploy: DeployResult;
   setLayers: Receipt;
 };
+
+type Renderer = {
+  name: string;
+  contract: string;
+  traits: string;
+};
+
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts, ethers } = hre;
   const { deploy, execute, read } = deployments;
   const RLE = await deployments.get("RLE");
 
   const { deployer } = await getNamedAccounts();
-  const renderers = ["Base", "RLE"];
+  const renderers: Renderer[] = [
+    {
+      name: "Base",
+      contract: "ChainRunnersBaseRenderer",
+      traits: "runners-base.json",
+    },
+    {
+      name: "RLE",
+      contract: "ChainRunnersRLERenderer",
+      traits: "runners-rle.json",
+    },
+    {
+      name: "SStore",
+      contract: "ChainRunnersSStoreRenderer",
+      traits: "runners-base.json",
+    },
+  ];
   const gas: Record<string, DeployCost> = {};
   for (const renderer of renderers) {
-    const contractRenderer = `ChainRunners${renderer}Renderer`;
-    const deployTx = await deploy(contractRenderer, {
+    const deployTx = await deploy(renderer.contract, {
       from: deployer,
       log: true,
       libraries: { RLE: RLE.address },
@@ -29,7 +51,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
     const layers = (
       JSON.parse(
-        fs.readFileSync(`runners-${renderer}.json`, { encoding: "utf-8" })
+        fs.readFileSync(renderer.traits, { encoding: "utf-8" })
       ) as Layers
     ).map((layer): LayerInput => {
       return {
@@ -39,33 +61,34 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         itemIndex: layer.itemIndex,
       };
     });
+
     const setLayersTx = await execute(
-      contractRenderer,
+      renderer.contract,
       { from: deployer, log: true },
       "setLayers",
       layers
     );
-    gas[renderer] = {
+    gas[renderer.name] = {
       deploy: deployTx,
       setLayers: setLayersTx,
     };
     const runner1SVG = await read(
-      contractRenderer,
+      renderer.contract,
       "tokenSVG",
       ethers.BigNumber.from(
         "103081089982373387917516143957755319387957419765940801994810980124138188719328"
       )
     );
-    fs.writeFileSync(`runner1-${renderer}.svg`, decode(runner1SVG));
+    fs.writeFileSync(`runner1-${renderer.name}.svg`, decode(runner1SVG));
   }
 
-  for (const [renderer, { deploy, setLayers }] of Object.entries(gas)) {
+  for (const [rendererName, { deploy, setLayers }] of Object.entries(gas)) {
     const totalCost = deploy.receipt
       ? BigNumber.from(deploy.receipt.gasUsed).add(
           BigNumber.from(setLayers.gasUsed)
         )
       : BigNumber.from(setLayers.gasUsed);
-    console.log(`${renderer} deploy cost: ${totalCost.toString()} gas`);
+    console.log(`${rendererName} deploy cost: ${totalCost.toString()} gas`);
   }
 };
 export default func;

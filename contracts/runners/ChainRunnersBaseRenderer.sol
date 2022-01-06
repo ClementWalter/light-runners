@@ -1086,7 +1086,7 @@ contract ChainRunnersBaseRenderer is Ownable, ReentrancyGuard {
         WEIGHTS[2][12] = [981, 2945, 654, 16, 981, 327, 654, 163, 3279];
     }
 
-    function setLayers(LayerInput[] calldata toSet) external onlyOwner {
+    function setLayers(LayerInput[] calldata toSet) external virtual onlyOwner {
         for (uint16 i = 0; i < toSet.length; i++) {
             layers[toSet[i].layerIndex][toSet[i].itemIndex] = Layer(
                 toSet[i].name,
