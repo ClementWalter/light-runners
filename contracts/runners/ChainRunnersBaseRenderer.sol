@@ -1098,6 +1098,7 @@ contract ChainRunnersBaseRenderer is Ownable, ReentrancyGuard {
     function getLayer(uint8 layerIndex, uint8 itemIndex)
         public
         view
+        virtual
         returns (Layer memory)
     {
         return layers[layerIndex][itemIndex];
@@ -1138,7 +1139,7 @@ contract ChainRunnersBaseRenderer is Ownable, ReentrancyGuard {
         uint16 _dna,
         uint8 _index,
         uint16 _raceIndex
-    ) public view returns (uint256) {
+    ) public view returns (uint8) {
         uint16 lowerBound;
         uint16 percentage;
         for (uint8 i; i < WEIGHTS[_raceIndex][_index].length; i++) {
@@ -1149,7 +1150,7 @@ contract ChainRunnersBaseRenderer is Ownable, ReentrancyGuard {
             lowerBound += percentage;
         }
         // If not found, return index higher than available layers.  Will get filtered out.
-        return WEIGHTS[_raceIndex][_index].length;
+        return uint8(WEIGHTS[_raceIndex][_index].length);
     }
 
     /*
@@ -1234,7 +1235,6 @@ contract ChainRunnersBaseRenderer is Ownable, ReentrancyGuard {
     function getTokenData(uint256 _dna)
         public
         view
-        virtual
         returns (
             Layer[NUM_LAYERS] memory tokenLayers,
             Color[NUM_COLORS][NUM_LAYERS] memory tokenPalettes,
@@ -1251,7 +1251,10 @@ contract ChainRunnersBaseRenderer is Ownable, ReentrancyGuard {
         bool hasHeadAbove = dna[11] < (10000 - WEIGHTS[raceIndex][11][48]);
         bool useHeadAbove = (dna[0] % 2) > 0;
         for (uint8 i = 0; i < NUM_LAYERS; i++) {
-            Layer memory layer = layers[i][getLayerIndex(dna[i], i, raceIndex)];
+            Layer memory layer = getLayer(
+                i,
+                getLayerIndex(dna[i], i, raceIndex)
+            );
             if (layer.hexString.length > 0) {
                 /*
                 These conditions help make sure layer selection meshes well visually.
