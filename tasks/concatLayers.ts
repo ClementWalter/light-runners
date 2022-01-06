@@ -2,7 +2,7 @@ import { task } from "hardhat/config";
 import fs from "fs";
 import { Layer } from "../utils/types";
 import { BytesLike } from "@ethersproject/bytes";
-import { chunk } from "lodash";
+import { chunk, mapValues } from "lodash";
 
 type LayerBytes = {
   layerIndex: BytesLike;
@@ -32,12 +32,18 @@ task("concat-layers", "RLE encode the runners traits to a JSON file")
     const MAX_CONTRACT_SIZE = 24_000;
     const traitsPerStorage = Math.floor(MAX_CONTRACT_SIZE / traitBytes);
     const traitsConcat = chunk(traits, traitsPerStorage).map((traitsChunk) =>
-      traitsChunk.reduce((acc, trait) => ({
-        layerIndex: hexConcat([acc.layerIndex, hexlify(trait.layerIndex)]),
-        itemIndex: hexConcat([acc.itemIndex, hexlify(trait.itemIndex)]),
-        hexString: hexConcat([acc.hexString, hexlify(trait.hexString)]),
-        itemName: acc.itemName + "|" + trait.itemName,
-      }))
+      mapValues(
+        traitsChunk.reduce((acc, trait) => ({
+          layerIndex: hexConcat([acc.layerIndex, hexlify(trait.layerIndex)]),
+          itemIndex: hexConcat([acc.itemIndex, hexlify(trait.itemIndex)]),
+          hexString: hexConcat([acc.hexString, hexlify(trait.hexString)]),
+          itemName: acc.itemName + "|" + trait.itemName,
+        })),
+        (value, key) =>
+          typeof value === "string" && key === "itemName"
+            ? value.split("|")
+            : value
+      )
     );
 
     fs.writeFileSync(output, JSON.stringify(traitsConcat, null, 2));
