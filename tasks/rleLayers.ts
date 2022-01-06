@@ -7,7 +7,7 @@ task("rle-layers", "RLE encode the runners traits to a JSON file")
   .addOptionalParam("input", "The output file", "runners-base.json")
   .addOptionalParam("output", "The output file", "runners-rle.json")
   .setAction(async ({ input, output }, { deployments }) => {
-    await deployments.fixture(["LightRunners"]);
+    await deployments.fixture(["ChainRunners"]);
     const traits: Layer[] = JSON.parse(
       fs.readFileSync(input, { encoding: "utf-8" })
     );
