@@ -94,9 +94,8 @@ describe("RLE", function () {
     it("Should revert when there is not enough bytes", async function () {
       const { RLE } = await setup();
       const rleString = "0x03ff10aa0100";
-      expect(
-        RLE.functions["decode(bytes,uint256,uint256)"](rleString, 2, 19)
-      ).to.be.revertedWith("RLE decode error: end of data reached");
+      expect(RLE.functions["decode(bytes,uint256,uint256)"](rleString, 2, 19))
+        .to.be.reverted;
     });
   });
 });

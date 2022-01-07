@@ -22,7 +22,7 @@ library RLE {
         bytes calldata _rleBytes,
         uint256 _offset,
         uint256 _length
-    ) public view returns (bytes memory) {
+    ) public pure returns (bytes memory) {
         uint16 start = 0;
         uint16 skipped = 0;
 
@@ -38,7 +38,7 @@ library RLE {
         bytes memory decodedBytes;
         for (
             uint8 j = 0;
-            j < uint8(_rleBytes[start]) - _offset + skipped;
+            j < uint8(_rleBytes[start]) - uint8(_offset - skipped);
             j++
         ) {
             decodedBytes = bytes.concat(decodedBytes, _rleBytes[start + 1]);
@@ -52,12 +52,14 @@ library RLE {
                 revert("RLE decode error: end of data reached");
             }
             for (uint8 j = 0; j < uint8(_rleBytes[start]); j++) {
-                decodedBytes = bytes.concat(decodedBytes, _rleBytes[start + 1]);
-
-                if (decodedBytes.length == _length) {
+                if (decodedBytes.length >= _length) {
                     break;
                 }
+                decodedBytes = bytes.concat(decodedBytes, _rleBytes[start + 1]);
             }
+        }
+        if (decodedBytes.length > _length) {
+            revert("RLE decode error: unknown error");
         }
         return decodedBytes;
     }

@@ -1212,7 +1212,7 @@ contract ChainRunnersBaseRenderer is Ownable, ReentrancyGuard {
             Layer[NUM_LAYERS] memory tokenLayers,
             Color[NUM_COLORS][NUM_LAYERS] memory tokenPalettes,
             uint8 numTokenLayers,
-            string[NUM_LAYERS] memory traitTypes
+
         ) = getTokenData(_dna);
         string[4] memory buffer256 = tokenSVGBuffer(
             tokenLayers,

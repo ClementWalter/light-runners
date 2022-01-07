@@ -272,7 +272,7 @@ contract ChainRunners is ERC721Enumerable, Ownable, ReentrancyGuard {
         earlyAccessStartTimestamp = timestamp;
     }
 
-    function checkHash(string memory seed) public view returns (uint256) {
+    function checkHash(string memory seed) public pure returns (uint256) {
         return uint256(keccak256(abi.encodePacked(seed)));
     }
 
