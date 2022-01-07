@@ -13,4 +13,17 @@ export type Layer = {
   itemIndex: number;
 };
 
+export type LayerConcat = {
+  itemName: string;
+  hexString: string;
+  layerIndex: string;
+  itemIndex: string;
+};
+
+export type LayerConcatRLE = {
+  itemName: string;
+  hexString: string;
+  layerIndex: string;
+};
+
 export type Layers = Layer[];
