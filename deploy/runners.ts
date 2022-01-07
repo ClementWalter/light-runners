@@ -26,34 +26,40 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const { deployer } = await getNamedAccounts();
   const renderers: Renderer[] = [
+    // {
+    //   name: "Base",
+    //   contract: "ChainRunnersBaseRenderer",
+    //   traits: "runners-base.json",
+    //   setLayers: "setLayers((string,bytes,uint8,uint8)[])",
+    // },
+    // {
+    //   name: "RLE",
+    //   contract: "ChainRunnersRLERenderer",
+    //   traits: "runners-rle.json",
+    //   setLayers: "setLayers((string,bytes,uint8,uint8)[])",
+    // },
+    // {
+    //   name: "SStore",
+    //   contract: "ChainRunnersSStoreRenderer",
+    //   traits: "runners-base.json",
+    //   setLayers: "setLayers((string,bytes,uint8,uint8)[])",
+    // },
+    // {
+    //   name: "SStore-RLE",
+    //   contract: "ChainRunnersSStoreRLERenderer",
+    //   traits: "runners-rle.json",
+    //   setLayers: "setLayers((string,bytes,uint8,uint8)[])",
+    // },
+    // {
+    //   name: "SStore-Concat",
+    //   contract: "ChainRunnersSStoreConcatRenderer",
+    //   traits: "runners-concat.json",
+    //   setLayers: "setLayers((string[],bytes,bytes,bytes)[])",
+    // },
     {
-      name: "Base",
-      contract: "ChainRunnersBaseRenderer",
-      traits: "runners-base.json",
-      setLayers: "setLayers((string,bytes,uint8,uint8)[])",
-    },
-    {
-      name: "RLE",
-      contract: "ChainRunnersRLERenderer",
-      traits: "runners-rle.json",
-      setLayers: "setLayers((string,bytes,uint8,uint8)[])",
-    },
-    {
-      name: "SStore",
-      contract: "ChainRunnersSStoreRenderer",
-      traits: "runners-base.json",
-      setLayers: "setLayers((string,bytes,uint8,uint8)[])",
-    },
-    {
-      name: "SStore-RLE",
-      contract: "ChainRunnersSStoreRLERenderer",
-      traits: "runners-rle.json",
-      setLayers: "setLayers((string,bytes,uint8,uint8)[])",
-    },
-    {
-      name: "SStore-Concat",
-      contract: "ChainRunnersSStoreConcatRenderer",
-      traits: "runners-concat.json",
+      name: "SStore-Concat-RLE",
+      contract: "ChainRunnersSStoreConcatRLERenderer",
+      traits: "runners-concat-rle.json",
       setLayers: "setLayers((string[],bytes,bytes,bytes)[])",
     },
   ];
