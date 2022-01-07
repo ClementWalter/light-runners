@@ -16,6 +16,7 @@ type Renderer = {
   name: string;
   contract: string;
   traits: string;
+  setLayers: string;
 };
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
@@ -29,21 +30,31 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       name: "Base",
       contract: "ChainRunnersBaseRenderer",
       traits: "runners-base.json",
+      setLayers: "setLayers((string,bytes,uint8,uint8)[])",
     },
     {
       name: "RLE",
       contract: "ChainRunnersRLERenderer",
       traits: "runners-rle.json",
+      setLayers: "setLayers((string,bytes,uint8,uint8)[])",
     },
     {
       name: "SStore",
       contract: "ChainRunnersSStoreRenderer",
       traits: "runners-base.json",
+      setLayers: "setLayers((string,bytes,uint8,uint8)[])",
     },
     {
       name: "SStore-RLE",
       contract: "ChainRunnersSStoreRLERenderer",
       traits: "runners-rle.json",
+      setLayers: "setLayers((string,bytes,uint8,uint8)[])",
+    },
+    {
+      name: "SStore-Concat",
+      contract: "ChainRunnersSStoreConcatRenderer",
+      traits: "runners-concat.json",
+      setLayers: "setLayers((string[],bytes,bytes,bytes)[])",
     },
   ];
   const gas: Record<string, DeployCost> = {};
@@ -70,7 +81,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const setLayersTx = await execute(
       renderer.contract,
       { from: deployer, log: true },
-      "setLayers",
+      renderer.setLayers,
       layers
     );
     gas[renderer.name] = {
